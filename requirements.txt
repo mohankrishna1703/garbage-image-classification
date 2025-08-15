@@ -1,0 +1,5 @@
+tensorflow-cpu
+streamlit
+matplotlib
+scikit-learn
+pillow
