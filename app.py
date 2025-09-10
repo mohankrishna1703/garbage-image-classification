@@ -1,7 +1,3 @@
-"""
-app.py - Garbage Classifier with Improved Unknown Handling
-"""
-
 import streamlit as st
 import tensorflow as tf
 import numpy as np
