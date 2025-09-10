@@ -1,103 +1,77 @@
-🗑 Garbage Image Classification Using Deep Learning
-📌 Overview
+Garbage Image Classification Using Deep Learning
+📌 Introduction
 
-This project classifies garbage images into 6 categories:
+This project is about classifying garbage images into six categories using Deep Learning.
+The categories are:
 
-Cardboard
+1. Cardboard
 
-Glass
+2. Glass
 
-Metal
+3. Metal
 
-Paper
+4. Paper
 
-Plastic
+5. Plastic
 
-Trash
+6. Trash
 
-It uses a Convolutional Neural Network (CNN) to recognize patterns in images and predict the correct category.
+The main idea is to use Artificial Intelligence (AI) to help in waste management.
+If machines can identify the type of garbage, it will help in automatic waste sorting, recycling, and keeping the environment clean.
 
-This can help in automated waste sorting, making recycling faster and more efficient.
+🎯 Objective
 
-📂 Dataset Structure
+The goal of this project is:
 
-The dataset is stored inside the data/ folder.
-data/
-├── cardboard/
-├── glass/
-├── metal/
-├── paper/
-├── plastic/
-└── trash/
-Each folder contains sample images for that category.
+- To build a Convolutional Neural Network (CNN) model that can classify garbage images.
 
-🛠 Requirements
+- To train the model on the given dataset.
 
-Install Python dependencies using:
-**pip install -r requirements.txt**
+- To create a simple web application using Streamlit where users can upload an image and get the predicted category.
 
-Main libraries used:
 
-tensorflow-cpu — to build and train the CNN model
+📂 Project Structure
 
-streamlit — to make a simple web app for predictions
+garbage_classification_project/
+│
+├── data/           # Dataset (images in 6 folders: cardboard, glass, etc.)
+├── models/         # Saved trained model (garbage_cnn.h5)
+├── train.py        # Training code
+└── app.py          # Streamlit web app
+│
+├── requirements.txt # Dependencies
+└── README.md        # Project report
 
-matplotlib — for visualizing training results
 
-scikit-learn — for splitting data and evaluation metrics
+📊 How It Works
 
-pillow — for image handling
+1. Images are resized to 128x128 pixels.
 
-🏋️ Training the Model
+2. Model uses a CNN (Convolutional Neural Network) with:
 
-Run this command to train the model:
-**python train_cnn.py**
+      - Convolution Layers
 
-This will:
+      - Pooling Layers
 
-Load the dataset from data/
+      - Dense Layers
 
-Preprocess and resize the images
+3. Output layer predicts 1 out of 6 categories.
 
-Train a CNN model
 
-Save the trained model in the models/ folder
+✅ Results
 
-🚀 Running the App
+1. The model can classify most images from the dataset correctly.
 
-After training, you can test your model using the Streamlit app:
-**streamlit run app.py**
+2. Works best on clear garbage images.
 
-Steps:
+3. On unrelated images (like human/animal pictures), it may still predict one of the garbage 
+categories → because it only knows 6 classes.
 
-Open the browser link shown in the terminal
 
-Upload a garbage image (jpg, png)
+⚠️ Limitations
 
-See the predicted category and confidence score
+1. Model is trained only on 6 categories → cannot say “Unknown”.
 
-📊 Example Prediction
+2. Accuracy depends on dataset quality.
 
-Input: Image of a crushed soda can
-
-Model Prediction: Metal
-
-🧠 Model Architecture
-
-The CNN model consists of:
-
-Conv2D Layers — Detect image features like edges and patterns
-
-MaxPooling Layers — Reduce image size to make training faster
-
-Flatten Layer — Convert 2D data to 1D
-
-Dense Layers — Fully connected layers for prediction
-
-Softmax Activation — Gives probability for each category
-
-Loss Function: Categorical Crossentropy
-Optimizer: Adam
-
-🔍 Project Flow
-**Image → Preprocessing → CNN Model → Prediction → Output Label**
+3. Doesn’t perform well on real-world, messy, or blurry images.
