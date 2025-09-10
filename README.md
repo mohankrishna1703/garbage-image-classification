@@ -1,4 +1,6 @@
 Garbage Image Classification Using Deep Learning
+
+
 📌 Introduction
 
 This project is about classifying garbage images into six categories using Deep Learning.
