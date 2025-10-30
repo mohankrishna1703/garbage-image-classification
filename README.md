@@ -42,6 +42,8 @@ garbage_classification_project/
 └── requirements.txt      # dependencies
 
 🧠 Step-by-Step to Run
+
+
 1️⃣ Install dependencies
 
 2️⃣ Check dataset
