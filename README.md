@@ -11,8 +11,6 @@ garbage_classification_project/
 
 ├── data/                 
 
-# dataset folders (one per class)
-
 │   ├── cardboard/
 
 │   ├── glass/
