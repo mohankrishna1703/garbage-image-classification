@@ -1,38 +1,51 @@
 import streamlit as st
-import tensorflow as tf
-import numpy as np
 from PIL import Image
+import numpy as np
+import tensorflow as tf
+from labels_utils import load_labels
 
-# Title
-st.title("♻️ Garbage Image Classifier")
+MODEL_PATH = "models/garbage_model.h5"
 
-# Load model
-MODEL_PATH = "models/garbage_cnn.h5"
-model = tf.keras.models.load_model(MODEL_PATH)
+st.set_page_config(page_title="Garbage Classifier", layout="centered")
+st.title("Garbage Classifier")
 
-# Class labels
-CLASS_NAMES = ["cardboard", "glass", "metal", "paper", "plastic", "trash"]
+if not st.sidebar.button("Reload model"):
+    pass
 
-# Upload image
-uploaded_file = st.file_uploader("Upload an image...", type=["jpg", "jpeg", "png"])
+@st.cache_resource
+def load_model(path):
+    return tf.keras.models.load_model(path)
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+try:
+    model = load_model(MODEL_PATH)
+except Exception as e:
+    st.error("Model not found. First run: python train_model.py")
+    st.stop()
 
-    # Preprocess
-    img = image.resize((128, 128))
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+inp_shape = model.input_shape
+IMG_SIZE = inp_shape[1] if len(inp_shape) == 4 else 224
 
-    # Prediction
-    predictions = model.predict(img_array)
-    predicted_index = np.argmax(predictions)
-    predicted_class = CLASS_NAMES[predicted_index]
-    confidence = np.max(predictions)
+labels = load_labels("models/labels.txt")
+if labels is None:
+    labels = ["cardboard","glass","metal","paper","plastic","trash"]
 
-    # Adjusted threshold (40%)
-    if confidence < 0.4:
-        st.error("Prediction: Unknown 🚫")
+threshold = st.sidebar.slider("Confidence threshold", 0.0, 1.0, 0.4, 0.01)
+
+def preprocess(img, size):
+    img = img.convert("RGB").resize((size,size))
+    arr = np.asarray(img, dtype="float32") / 255.0
+    return np.expand_dims(arr, 0)
+
+uploaded = st.file_uploader("Upload image", type=["jpg","jpeg","png"])
+if uploaded:
+    img = Image.open(uploaded)
+    st.image(img, use_column_width=True)
+    x = preprocess(img, IMG_SIZE)
+    preds = model.predict(x)[0]
+    idx = int(np.argmax(preds))
+    conf = float(preds[idx])
+    label = labels[idx] if idx < len(labels) else str(idx)
+    if conf < threshold:
+        st.error(f"Unknown (confidence {conf:.3f} < {threshold:.2f})")
     else:
-        st.success(f"Prediction: {predicted_class}")
+        st.success(f"{label} ({conf:.3f})")
